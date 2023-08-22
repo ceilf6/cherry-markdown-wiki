@@ -6,6 +6,7 @@
 	- 自定义语法
 	- 右侧预览器表格、图片尺寸支持编辑
 	- 左右滚动支持联动
+	- 切换主题等
 - [H5](https://tencent.github.io/cherry-markdown/examples/h5.html)
 	- 纯编辑模式和纯预览模式
 - [多实例](https://tencent.github.io/cherry-markdown/examples/multiple.html)
