@@ -146,6 +146,7 @@ toolbars:{
   - **settings**: 设置
   - **switchModel**: 切换编辑/预览模式(用于单栏编辑/预览模式)
   - **togglePreview**: 打开/关闭预览区(用于左右分栏模式)
+  - **justify**: 对齐方式(左对齐、居中、右对齐)
 
 ### 引擎配置
 
@@ -414,6 +415,7 @@ toolbars:{
   - **Settings**: settings
   - **switchModel**: switch edit / preview mode (for single column edit / preview mode)
   - **togglePreview**: turn the preview area on / off (for  live preview with Scroll Sync)
+  - **justify**: align type (left, center, right)
 
 ### Engine Config
 
