@@ -7,6 +7,9 @@
 	- 右侧预览器表格、图片尺寸支持编辑
 	- 左右滚动支持联动
 	- 切换主题等
+- [最简实现](https://tencent.github.io/cherry-markdown/examples/basic.html)
+	- 几乎完全使用默认配置
+	- 基本上就是引入css、引入js、定义一个div、三行代码实现
 - [H5](https://tencent.github.io/cherry-markdown/examples/h5.html)
 	- 纯编辑模式和纯预览模式
 - [多实例](https://tencent.github.io/cherry-markdown/examples/multiple.html)
