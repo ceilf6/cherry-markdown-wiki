@@ -2,7 +2,7 @@
 
 > 支持了所有常用的、通用的语法，除此之外我们还支持了一些有意思的语法
 
-### 特性 1：图片缩放、对齐、引用
+### 特性 1：图片尺寸、阴影、边框、圆角
 
 #### 语法
 
@@ -10,17 +10,21 @@
 
 > 其中，`宽度`、`高度`支持：绝对像素值（比如200px）、相对外层容器百分比（比如50%），
 `对齐方式`候选值有：左对齐（缺省）、右对齐（right）、居中（center）、悬浮左、右对齐（float-left/right）
-![图片尺寸](https://raw.githubusercontent.com/Tencent/cherry-markdown/main/examples/images/feature_image_size.png)
+
+![图片编辑](https://github.com/Tencent/cherry-markdown/assets/998441/5d3fffda-b224-4251-9552-27a2b3a41fcd)
 
 -----
 
-### 特性 2：根据表格内容生成图表
-![表格图表](https://raw.githubusercontent.com/Tencent/cherry-markdown/main/examples/images/feature_table_chart.png)
+### 特性 2：信息面板、手风琴
+![信息面板](https://github.com/Tencent/cherry-markdown/assets/998441/95e601db-50d2-476e-be33-359b396be62e)
+![手风琴](https://github.com/Tencent/cherry-markdown/assets/998441/033fe94e-70f5-4e76-a9f9-a37993b3c2c9)
+
 
 -----
 
-### 特性 3：字体颜色、字体大小
-![字体样式](https://raw.githubusercontent.com/Tencent/cherry-markdown/main/examples/images/feature_font.png)
+### 特性 3：字体颜色、字体大小、对齐方式
+![字体样式（静态）](https://github.com/Tencent/cherry-markdown/assets/998441/8ff307d5-048e-401a-abaf-8c7390376921)
+
 
 ------
 
@@ -52,8 +56,9 @@
 
 想要批量修改？可以试试多光标编辑（快捷键、搜索多光标选中等功能正在开发中）
 
-### 特性 4：图片尺寸
-![wysiwyg](https://raw.githubusercontent.com/Tencent/cherry-markdown/main/examples/images/feature_image_wysiwyg.gif)
+### 特性 4：draw.io画图
+![drawio编辑](https://github.com/Tencent/cherry-markdown/assets/998441/e28377a0-e772-47f4-9f39-0bf806a6786e)
+
 
 ### Feature 5：表格编辑
 
