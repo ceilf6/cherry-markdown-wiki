@@ -61,8 +61,8 @@
 
 
 ### Feature 5：表格编辑
+![表格编辑](https://github.com/Tencent/cherry-markdown/assets/998441/105b4713-9161-4521-b8f8-4dd303449e58)
 
-![wysiwyg](https://raw.githubusercontent.com/Tencent/cherry-markdown/main/examples/images/feature_table_wysiwyg.gif)
 
 ### 特性 6：导出
 ![wysiwyg](https://raw.githubusercontent.com/Tencent/cherry-markdown/main/examples/images/feature_export.png)
