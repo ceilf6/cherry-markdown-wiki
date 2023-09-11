@@ -23,7 +23,7 @@
 -----
 
 ### 特性 3：字体颜色、字体大小、对齐方式
-![字体样式（静态）](https://github.com/Tencent/cherry-markdown/assets/998441/8ff307d5-048e-401a-abaf-8c7390376921)
+![字体样式](https://github.com/Tencent/cherry-markdown/assets/998441/c72e099d-6802-492a-a78e-d70d7d4ff113)
 
 
 ------
