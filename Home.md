@@ -22,3 +22,7 @@
 - [图片所见即所得编辑尺寸](https://tencent.github.io/cherry-markdown/examples/img.html)
 - [表格所见即所得编辑尺寸](https://tencent.github.io/cherry-markdown/examples/table.html)
 - [标题自动序号](https://tencent.github.io/cherry-markdown/examples/head_num.html)
+
+## 从入门到下班
+
+[看这里](https://github.com/Tencent/cherry-markdown/wiki/%E5%88%9D%E8%AF%86cherry-markdown-%E7%BC%96%E8%BE%91%E5%99%A8)
