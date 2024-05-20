@@ -31,7 +31,8 @@
 ## 功能特性
 
 ### 特性 1：复制Html粘贴成MD语法
-![html转md](https://raw.githubusercontent.com/Tencent/cherry-markdown/main/examples/images/feature_copy.gif)
+![1](https://github.com/Tencent/cherry-markdown/assets/998441/3cc8c7ea-4d34-4dc9-a744-7f77999d349f)
+
 
 #### 使用场景
 
