@@ -12,8 +12,14 @@
 // 引入cherry的js文件
 <script src="/dist/cherry-markdown.min.js"></script> 
 <script>
+    // 方式一
     new Cherry({
         id: 'markdown-container', 
+        value: '## hello world', 
+    });
+    // 方式二
+    new Cherry({
+        el: document.querySelector('#markdown-container'), 
         value: '## hello world', 
     });
 </script>
