@@ -18,7 +18,6 @@
 - [注入](https://tencent.github.io/cherry-markdown/examples/xss.html)
 	- 演示如何通过配置实现支持注入
 	- 使用场景：在查看页需要运行js、渲染iframe等
-- [API](https://tencent.github.io/cherry-markdown/examples/api.html)
 - [图片所见即所得编辑尺寸](https://tencent.github.io/cherry-markdown/examples/img.html)
 - [表格所见即所得编辑尺寸](https://tencent.github.io/cherry-markdown/examples/table.html)
 - [标题自动序号](https://tencent.github.io/cherry-markdown/examples/head_num.html)
