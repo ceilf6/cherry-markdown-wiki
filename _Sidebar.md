@@ -9,5 +9,6 @@
 8. [配置项全解](https://github.com/Tencent/cherry-markdown/wiki/%E9%85%8D%E7%BD%AE%E9%A1%B9%E5%85%A8%E8%A7%A3)
 9. [配置主题](https://github.com/Tencent/cherry-markdown/wiki/%E9%85%8D%E7%BD%AE%E4%B8%BB%E9%A2%98)
 10. [扩展代码块语法](https://github.com/Tencent/cherry-markdown/wiki/%E6%89%A9%E5%B1%95%E4%BB%A3%E7%A0%81%E5%9D%97%E8%AF%AD%E6%B3%95)
-11. [事件&回调](https://github.com/Tencent/cherry-markdown/wiki/%E4%BA%8B%E4%BB%B6&%E5%9B%9E%E8%B0%83)
-12. [API](https://tencent.github.io/cherry-markdown/examples/api.html)
+11. [多语言](https://github.com/Tencent/cherry-markdown/wiki/%E5%A4%9A%E8%AF%AD%E8%A8%80)
+12. [事件&回调](https://github.com/Tencent/cherry-markdown/wiki/%E4%BA%8B%E4%BB%B6&%E5%9B%9E%E8%B0%83)
+13. [API](https://tencent.github.io/cherry-markdown/examples/api.html)
