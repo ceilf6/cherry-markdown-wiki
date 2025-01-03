@@ -20,6 +20,7 @@ new Cherry({
 在这个例子中，我们在`callback`中定义了`urlProcessor`，当`markdown`中存在图片、音频、视频、自动链接、链接时，会调用`urlProcessor`进行处理。
 
 ## 异步例子
+> 异步仅在**v0.8.58**及以上版本才支持
 
 ```javascript
 new Cherry({
