@@ -22,6 +22,7 @@
 - [表格所见即所得编辑尺寸](https://tencent.github.io/cherry-markdown/examples/table.html)
 - [标题自动序号](https://tencent.github.io/cherry-markdown/examples/head_num.html)
 - [流式输入模式（AI chart场景）](https://tencent.github.io/cherry-markdown/examples/ai_chat.html)
+	- 打开流式输入模式后，加粗斜体、代码块、无序列表、表格等内容的输入更加稳定（样式不会突然跳变或反复横跳）
 
 ## 从入门到下班
 
