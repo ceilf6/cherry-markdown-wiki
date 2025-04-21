@@ -40,6 +40,21 @@ Close #10
 7.  chore：构建过程或辅助工具的变动
 ```
 
+### 提交
+
+> [!IMPORTANT]
+
+当前提交需要使用 changeset cli
+执行 `yarn changeset` 
+如果当前有包含提交的依赖就使用空格选中
+
+![image](https://github.com/user-attachments/assets/8eb10ca6-28dc-486f-9cc4-61728c7d55d2)
+
+然后点击回车，分别有 `major bump`、`minor bump`、`patch bumped`进行选择，这里会影响到后面依赖升级的版本。
+然后在 `Summary »` 后提交此次 commit 信息。
+
+![image](https://github.com/user-attachments/assets/1807c725-fdae-468c-b98d-b593eeb23f27)
+
 -------
 
 ### I. Specification Significance
@@ -80,3 +95,24 @@ Closes #10
 ​​refactor​​: Code restructuring (non-feature/bug-fix changes)
 ​​test​​: Test additions/modifications
 ​​chore​​: Build process or tooling changes
+
+### Commit Instructions  
+
+> [!IMPORTANT]  
+>  
+> Current commits require the use of **Changeset CLI**.  
+> Run `yarn changeset`.  
+> If the commit includes dependency changes, use the **spacebar** to select them.  
+
+![image](https://github.com/user-attachments/assets/8eb10ca6-28dc-486f-9cc4-61728c7d55d2)  
+
+Then press **Enter**, and choose between:  
+- **major bump**  
+- **minor bump**  
+- **patch bump**  
+
+This selection will affect the dependency upgrade version.  
+
+Next, under `Summary »`, enter the commit message for this change.  
+
+![image](https://github.com/user-attachments/assets/1807c725-fdae-468c-b98d-b593eeb23f27)  
