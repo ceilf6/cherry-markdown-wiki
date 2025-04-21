@@ -72,7 +72,6 @@ npm run dev
 ----
 
 ## 目录
-- [在线demo](https://github.com/Tencent/cherry-markdown/wiki)
 - [特性展示](https://github.com/Tencent/cherry-markdown/wiki/%E7%89%B9%E6%80%A7%E5%B1%95%E7%A4%BA-features)
 - [初识cherry markdown 编辑器](https://github.com/Tencent/cherry-markdown/wiki/%E5%88%9D%E8%AF%86cherry-markdown-%E7%BC%96%E8%BE%91%E5%99%A8)
 - [构建产物介绍&引入mermaid和echarts](https://github.com/Tencent/cherry-markdown/wiki/%E6%9E%84%E5%BB%BA%E4%BA%A7%E7%89%A9%E4%BB%8B%E7%BB%8D)
