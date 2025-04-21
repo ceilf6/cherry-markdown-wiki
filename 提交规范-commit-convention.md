@@ -20,7 +20,7 @@
 ### 示例
 
 ```
-fix: 四个空格（2个tab）需识别为代码块
+fix: [空格] 别为代码块
 
 其他补充信息，解释fix 标题
 
@@ -40,100 +40,43 @@ Close #10
 7.  chore：构建过程或辅助工具的变动
 ```
 
-### 使用git cz提交(开发者可选方式)
-
-为了方便使用，增加了[commitizen](https://github.com/commitizen/cz-cli)支持，使用[cz-customizable](https://github.com/leonardoanalista/cz-customizable)进行配置。支持使用 `git cz` 替代 `git commit` 。
-需全局安装
-`npm install commitizen -g`
-
-## 三、自动生成changelog（生成release，为版本发布使用）
-
-**master分支合并新代码** 后生成新版本：
-执行指令
-`npm run release -- --release-as 1.1.0`
-
-自动生成Change log，生成的文档包括3个部分：
-
-- New features
-- Bug fixes
-- Breaking changes
-
-每个部分都会罗列相关的 commit ，并且有指向这些 commit 的链接。生成的文档允许手动修改，所以发布前，你还可以添加其他内容。
-
-## 四、版本发布
-
-执行上条release指令后才能执行发布流程：
-执行指令
-`npm run publish`
-
-
 -------
 
+### I. Specification Significance
+As an open-source project, our commit conventions should align with industry standards using Conventional Commits. We aim to establish a customized commit specification while standardizing development workflows for version management and collaborative development.
 
-## 一、 Normative implication
-
-As a formal open-source project team, our submission specifications are consistent with the Conventional Commits specifications.
-
-## 二、提交公式
-
-```bash
+### II. Commit Formula
+```
 <type>(<scope>): <subject>
 <BLANK LINE>
 <body>
 <BLANK LINE>
-<footer>
+<footer># 
 ```
 
-- Title line:  **must be filled** , describe your main modification type and content, scope enhance the description submission scope, such as the Cherry core layer, Edior, Previewer, etc.
-- Subject content: describe why you changed, what you had changed and development ideas  **here directly cites to the tapd source code keyword. Don't fill in if you don't have it
-- Footer notes:  for Breaking Changes or Closed Issues
+- Header Line ​​(required）​​
+Describes the primary modification type and content. The scope enhances context (e.g., core, Editor, Previewer in our project).
+
+- Body
+Explains ​​why​​ and ​​how​​ the changes were made, including development rationale. ​​Reference TAPD source code keywords if applicable; omit otherwise.​​
+
+- Footer
+Records ​​Breaking Changes​​ or ​​Closed Issues​​ (e.g., Closes #10).
 
 ### Example
+fix(core): ensure code block spacing
 
-```bash
-fix: 四个空格（2个tab）需识别为代码块
+Additional context about the fix.
 
-其他补充信息，解释fix 标题
+Fixed #10
+Closes #10
 
-Fixed #10 
-Close #10
-```
+### Allowed type Values
 
-### Types are as follows
-
-```bash
-1.  feat：新功能（feature）
-2.  fix：修补 bug
-3.  docs：文档（documentation）
-4.  style： 格式（不影响代码运行的变动）
-5.  refactor：重构（即不是新增功能，也不是修改 bug 的代码变动）
-6.  test：增加测试
-7.  chore：构建过程或辅助工具的变动
-```
-
-### Use git cz to submit (developer optional method)
-
-We support commitizen support for ease of use, use cz-customizable to configure. Support  git cz instead of git commit. Need install globally npm install commitizen -g
-
-`npm install commitizen -g`
-
-## 三、Automatically generate Change log（generate release for release）
-
- Generate a new version after **merging the new code in the master branch**: Execute the command:
-
-`npm run release -- --release-as 1.1.0`
-
-Automatically generate Change log，The generated document consists of three parts：
-
-- New features
-- Bug fixes
-- Breaking changes
-
-Each section will list the related commit, and there are links to those commits. The generated document allows manual modification, so you can add other content before publishing.
-
-## 四、Version release
-
-The release process can only be executed after the previous release instruction is executed:
-
-`npm run publish`
-
+​​feat​​: New feature
+​​fix​​: Bug fix
+​​docs​​: Documentation changes
+​​style​​: Code formatting (non-functional changes)
+​​refactor​​: Code restructuring (non-feature/bug-fix changes)
+​​test​​: Test additions/modifications
+​​chore​​: Build process or tooling changes
