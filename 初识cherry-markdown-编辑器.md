@@ -72,6 +72,8 @@ cherry的主要特点是“**给的多**”，力求使用方能**开箱即用**
     - editOnly 纯编辑模式
     - previewOnly 纯预览模式
     - WYSIWYG 所见即所得编辑模式（其实就是milkdown编辑器）
+- 性能再优化（有用户反馈10w行且有非常多公式时卡死）
+- mermaid升级（新版mermaid不再支持同步调用了，所以cherry.engine.makeHtml要支持异步，改动比较大）
 
 ### 客户端慢慢做
 就按[规划](https://github.com/Tencent/cherry-markdown/issues/970)慢慢做
