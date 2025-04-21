@@ -44,8 +44,8 @@ Close #10
 
 > [!IMPORTANT]  
 > 当前提交需要使用 `changeset-cli` 进行提交 release 信息。
-执行 `yarn changeset` 
-如果当前有包含提交的依赖就使用空格选中
+
+执行 `yarn changeset`,如果当前有包含提交的依赖就使用空格选中。
 
 ![image](https://github.com/user-attachments/assets/8eb10ca6-28dc-486f-9cc4-61728c7d55d2)
 
@@ -97,10 +97,10 @@ Closes #10
 
 ### Commit Instructions  
 
-[!IMPORTANT]
-Current commits require using `changeset-cli` to submit release information.
-> Run `yarn changeset`.  
-> If the commit includes dependency changes, use the **spacebar** to select them.  
+> [!IMPORTANT]
+> Current commits require using `changeset-cli` to submit release information.
+
+  Run `yarn changeset`, If the commit includes dependency changes, use the **spacebar** to select them.  
 
 ![image](https://github.com/user-attachments/assets/8eb10ca6-28dc-486f-9cc4-61728c7d55d2)  
 
