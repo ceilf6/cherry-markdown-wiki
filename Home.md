@@ -65,6 +65,12 @@ npm run dev
 - [事件&回调](https://github.com/Tencent/cherry-markdown/wiki/%E4%BA%8B%E4%BB%B6&%E5%9B%9E%E8%B0%83)
 - [API](https://tencent.github.io/cherry-markdown/examples/api.html)
 
+### 特别注意
+
+**vue3**选手需要避免使用[代理cherry实例](https://github.com/Tencent/cherry-markdown/issues/381#issuecomment-1399377500)的方式，否则会引入各种蜜汁bug
+
+----
+
 ## 目录
 - [在线demo](https://github.com/Tencent/cherry-markdown/wiki)
 - [特性展示](https://github.com/Tencent/cherry-markdown/wiki/%E7%89%B9%E6%80%A7%E5%B1%95%E7%A4%BA-features)
