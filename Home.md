@@ -39,8 +39,8 @@ cherry markdown是一款**前端**-**markdown**-**编辑器**-**组件**：
 ### 本地开发
 ```javascript
 cd cherry-markdown
-yarn install
-npm run dev
+yarn
+yarn dev
 ```
 
 ### 提交规范
