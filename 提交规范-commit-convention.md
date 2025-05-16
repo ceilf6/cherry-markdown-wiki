@@ -56,6 +56,9 @@ Close #10
 
 ![image](https://github.com/user-attachments/assets/1807c725-fdae-468c-b98d-b593eeb23f27)
 
+### 发布规范
+[发布规范](https://github.com/Tencent/cherry-markdown/wiki/%E5%8F%91%E5%B8%83%E8%A7%84%E8%8C%83)
+
 -------
 
 ### I. Specification Significance
