@@ -1,5 +1,5 @@
 > [!CAUTION]
-> 不要往`main` 分支提交任何修改性质代码，`main` 分支只作为发版分支，请使用 develop 代码基准进行开发。
+> 不要往`main` 分支提交任何修改性质代码，`main` 分支只作为发版分支，请使用 [dev](https://github.com/Tencent/cherry-markdown/tree/dev) 代码基准进行开发。
 
 ## 一、规范意义
 
@@ -117,7 +117,7 @@ Close #10
 -------
 
 > [!CAUTION]
-> Do not commit any modification code to the `main` branch. The `main` branch is only used as a release branch, use the develop code base for development.
+> Do not commit any modification code to the `main` branch. The `main` branch is only used as a release branch, use the [dev](https://github.com/Tencent/cherry-markdown/tree/dev) code base for development.
 
 ## 1. Significance of Standards
 
