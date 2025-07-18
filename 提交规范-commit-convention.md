@@ -115,61 +115,118 @@ Close #10
 
 -------
 
-### I. Specification Significance
-As an open-source project, our commit conventions should align with industry standards using Conventional Commits. We aim to establish a customized commit specification while standardizing development workflows for version management and collaborative development.
+> [!CAUTION]
+> Do not commit any modification code to the `main` branch. The `main` branch is only used as a release branch.
 
-### II. Commit Formula
+## 1. Significance of Standards
+
+As an open source project, our commit standards should be consistent with the industry standard [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), so we need to customize a set of commit standards that suits us. At the same time, we also standardize the development workflow for version management and multi-person collaboration.
+
+### Development Preparation
+
+1. **Fork & Clone**  
+   You need to Fork the project first, then clone it locally:
+
+```bash
+git clone https://github.com/<your-username>/cherry-markdown.git
 ```
+
+2. **Branch Standards**  
+Create development branches in the forked repository with naming format: `type/working` (e.g.: `feat/emoji-support`)
+
+3. **Environment Configuration**  
+The project uses `yarn@1.x` for dependency management:
+
+```bash
+npm install yarn -g
+yarn
+```
+
+### Project Structure
+
+This project uses yarn workspaces monorepo architecture:
+
+```bash
+cherry-markdown
+├── .git // github workflow
+├── examples // example code
+├── packages
+│   ├── cherry-markdown // cherry-markdown core functionality
+│   ├── client  // tauri developed client
+│   └── vscodePlugin // vscode plugin
+└── scripts // common scripts
+```
+
+### Code Quality
+
+After completing feature development, code format detection should be performed to ensure consistent code formatting among developers.
+
+1. **Global Detection and Fixing**
+
+- Detect global issues: `yarn lint:all`
+- Fix global issues: `yarn lint:all:fix`
+
+2. **Module Operations**
+
+You can also execute corresponding code formatting commands separately in the corresponding modules.
+
+| Module | Detection Command | Fix Command |
+|--------|-------------------|-------------|
+| `packages/cherry-markdown` | `yarn lint` | `yarn lint:fix` |
+| `packages/client` | `yarn lint` | `yarn lint:fix` |
+| `packages/vscodePlugin` | `yarn lint` | `yarn lint:fix` |
+
+## 2. Commit Formula
+
+```bash
 <type>(<scope>): <subject>
 <BLANK LINE>
 <body>
 <BLANK LINE>
-<footer># 
+<footer>
 ```
 
-- Header Line ​​(required）​​
-Describes the primary modification type and content. The scope enhances context (e.g., core, Editor, Previewer in our project).
-
-- Body
-Explains ​​why​​ and ​​how​​ the changes were made, including development rationale. ​​Reference TAPD source code keywords if applicable; omit otherwise.​​
-
-- Footer
-Records ​​Breaking Changes​​ or ​​Closed Issues​​ (e.g., Closes #10).
+- Title line: **Required**, describes the main modification type and content. Scope enhances the description of commit scope, such as Cherry's core layer, Editor, Previewer, etc.
+- Body content: Describes why the modification was made, what kind of modification was made, and the development approach; **Directly reference TAPD source keywords here, leave blank if none**
+- Footer notes: Put Breaking Changes or Closed Issues
 
 ### Example
-fix(core): ensure code block spacing
 
-Additional context about the fix.
+```bash
+fix: code block spacing issue
 
-Fixed #10
-Closes #10
+Additional information explaining the fix title
 
-### Allowed type Values
+Fixed #10 
+Close #10
+```
 
-​​feat​​: New feature
-​​fix​​: Bug fix
-​​docs​​: Documentation changes
-​​style​​: Code formatting (non-functional changes)
-​​refactor​​: Code restructuring (non-feature/bug-fix changes)
-​​test​​: Test additions/modifications
-​​chore​​: Build process or tooling changes
+### Type Categories
 
-### Commit Instructions  
+```bash
+1.  feat: new feature
+2.  fix: bug fix
+3.  docs: documentation
+4.  style: formatting (changes that do not affect code execution)
+5.  refactor: refactoring (code changes that are neither new features nor bug fixes)
+6.  test: add tests
+7.  chore: changes to build process or auxiliary tools
+```
 
-> [!IMPORTANT]
-> Current commits require using `changeset-cli` to submit release information.
+### Commit Process
 
-  Run `yarn changeset`, If the commit includes dependency changes, use the **spacebar** to select them.  
+> [!IMPORTANT]  
+> Current commits need to use `changeset-cli` to submit release information.
 
-![image](https://github.com/user-attachments/assets/8eb10ca6-28dc-486f-9cc4-61728c7d55d2)  
+Execute `yarn changeset`. If there are dependencies that include commits, select them with the space bar.
 
-Then press **Enter**, and choose between:  
-- **major bump**  
-- **minor bump**  
-- **patch bump**  
+![image](https://github.com/user-attachments/assets/8eb10ca6-28dc-486f-9cc4-61728c7d55d2)
 
-This selection will affect the dependency upgrade version.  
+Then press Enter, and you can choose from `major bump`, `minor bump`, `patch bump`. This will affect the version upgrade of dependencies later.
+Then submit the commit information after `Summary »`.
 
-Next, under `Summary »`, enter the commit message for this change.  
+![image](https://github.com/user-attachments/assets/1807c725-fdae-468c-b98d-b593eeb23f27)
 
-![image](https://github.com/user-attachments/assets/1807c725-fdae-468c-b98d-b593eeb23f27)  
+### Release Standards
+
+[Release Standards](https://github.com/Tencent/cherry-markdown/wiki/%E5%8F%91%E5%B8%83%E8%A7%84%E8%8C%83)
