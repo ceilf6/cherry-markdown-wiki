@@ -3,9 +3,63 @@
 
 ## 一、规范意义
 
-作为开源项目，我们的提交规范也要和业界使用[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/ )的规范一致，因此要定制一套符合我们的提交规范。同时，我们还规范开发工作流，以便版本管理和多人协作。
+作为开源项目，我们的提交规范也要和业界使用 [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) 的规范一致，因此要定制一套符合我们的提交规范。同时，我们还规范开发工作流，以便版本管理和多人协作。
 
-## 二、提交公式
+### 开发准备
+
+1. **Fork & Clone**  
+   需先 Fork 项目，然后克隆到本地：
+
+```bash
+  git clone https://github.com/<your-username>/cherry-markdown.git
+```
+
+2. **分支规范**  
+在 Fork 的仓库中创建开发分支，命名格式：`type/working` (例：`feat/emoji-support`)
+
+3. **环境配置**  
+项目使用 `yarn@1.x` 管理依赖：
+
+```
+npm install yarn -g
+yarn
+```
+
+### 项目分区
+
+本项目采用  yarn workspaces monorepo 架构：
+
+``` bash
+cherry-markdown
+├── .git // github 工作流
+├── examples // 示例代码
+├── packages
+│   ├── cherry-markdown // cherry-markdown 核心功能
+│   ├── client  // tuari 开发的客户端
+│   └── vscodePlugin // vscode 插件
+└── scripts // 公共脚本
+```
+
+### 代码质量
+
+在功能开发完成后应该进行代码格式检测，以确保开发者们代码格式一致。
+
+1. **全局检测与修复**
+
+-  检测全局问题: `yarn lint:all`
+-  全局问题修复: `yarn lint:all:fix`
+
+2. **分区操作**
+
+当然你也可以在对应的分区内单独执行对应的代码格式化命令。
+
+| 模块 | 检测命令 | 修复命令 |
+|------|----------|----------|
+| `packages/cherry-markdown` | `yarn lint` | `yarn lint:fix` |
+| `packages/client` | `yarn lint` | `yarn lint:fix` |
+| `packages/vscodePlugin` | `yarn lint` | `yarn lint:fix` |
+
+## 三、提交公式
 
 ```
 <type>(<scope>): <subject>
