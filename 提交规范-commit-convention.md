@@ -20,7 +20,7 @@
 3. **环境配置**  
 项目使用 `yarn@1.x` 管理依赖：
 
-```
+```bash
 npm install yarn -g
 yarn
 ```
@@ -72,22 +72,21 @@ cherry-markdown
 
 - 标题行: **必填** , 描述主要修改类型和内容，scope 增强描述提交作用范围，例如我们 cherry 的 Edior、Previewer 等，或者修改的是 client、vscodePlugin 功能。
 - 主题内容: **可选** 描述为什么修改, 做了什么样的修改, 以及开发的思路，或者 head 没有描述完的修复。
-- 页脚注释: **可选** 声明 Breaking Changes 或 Closed Issues。
+- 页脚注释: **可选** 声明 Breaking Changes 或 Closed Issues。（如需关联 issue 而非关闭，可直接使用 isssue (#333) 进行关联）
 
 ### 示例
 
-```
-fix: [空格] 别为代码块
+```bash
+fix(clinet): 修复在 windows 上运行失败的问题
 
-其他补充信息，解释fix 标题
+其他补充信息，解释 fix 标题
 
-Fixed #10 
-Close #10
+close #10
 ```
 
 ### type 类型如下
 
-```
+```bash
 1.  feat：新功能（feature）
 2.  fix：修补 bug
 3.  docs：文档（documentation）
@@ -189,17 +188,16 @@ You can also execute corresponding code formatting commands separately in the co
 
 - Title line: **Required**, describes the main modification type and content. Scope enhances the description of commit scope, such as Cherry's Editor, Previewer, etc., or modifications to client, vscodePlugin functionality.
 - Body content: **Optional**, describes why the modification was made, what kind of modification was made, and the development approach, or fixes that weren't fully described in the header.
-- Footer notes: **Optional** Put Breaking Changes or Closed Issues.
+- Footer notes: **Optional** Put Breaking Changes or Closed Issues.(If you only want to reference an issue without closing it, you can simply use issue(#333) to link it)
 
 ### Example
 
 ```bash
-fix: code block spacing issue
+fix(clinet): repair existing windows problem
 
-Additional information explaining the fix title
+additional Notes: Explanation of "Fix" in Commit Titles
 
-Fixed #10 
-Close #10
+close #10
 ```
 
 ### Type Categories
