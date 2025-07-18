@@ -62,16 +62,17 @@ cherry-markdown
 ## 三、提交公式
 
 ```
-<type>(<scope>): <subject>
-<BLANK LINE>
-<body>
-<BLANK LINE>
-<footer>
+[<type>](<scope>) <subject> (#pr)
+
+[optional body]
+
+[optional footer(s)]
+
 ```
 
-- 标题行:  **必填** , 描述主要修改类型和内容，scope增强描述提交作用范围，例如我们cherry的core层、Edior、Previewer等
-- 主题内容: 描述为什么修改, 做了什么样的修改, 以及开发的思路； **这里直接引用tapd源码关键字，若没有则不填**
-- 页脚注释: 放 Breaking Changes 或 Closed Issues
+- 标题行: **必填** , 描述主要修改类型和内容，scope 增强描述提交作用范围，例如我们 cherry 的 Edior、Previewer 等，或者修改的是 client、vscodePlugin 功能。
+- 主题内容: **可选** 描述为什么修改, 做了什么样的修改, 以及开发的思路，或者 head 没有描述完的修复。
+- 页脚注释: **可选** 声明 Breaking Changes 或 Closed Issues。
 
 ### 示例
 
@@ -179,16 +180,16 @@ You can also execute corresponding code formatting commands separately in the co
 ## 2. Commit Formula
 
 ```bash
-<type>(<scope>): <subject>
-<BLANK LINE>
-<body>
-<BLANK LINE>
-<footer>
+[<type>](<scope>) <subject> (#pr)
+
+[optional body]
+
+[optional footer(s)]
 ```
 
-- Title line: **Required**, describes the main modification type and content. Scope enhances the description of commit scope, such as Cherry's core layer, Editor, Previewer, etc.
-- Body content: Describes why the modification was made, what kind of modification was made, and the development approach; **Directly reference TAPD source keywords here, leave blank if none**
-- Footer notes: Put Breaking Changes or Closed Issues
+- Title line: **Required**, describes the main modification type and content. Scope enhances the description of commit scope, such as Cherry's Editor, Previewer, etc., or modifications to client, vscodePlugin functionality.
+- Body content: **Optional**, describes why the modification was made, what kind of modification was made, and the development approach, or fixes that weren't fully described in the header.
+- Footer notes: **Optional** Put Breaking Changes or Closed Issues.
 
 ### Example
 
