@@ -43,8 +43,8 @@ yarn
 yarn dev
 ```
 
-### 提交规范
-[提交规范 commit convention](https://github.com/Tencent/cherry-markdown/wiki/%E6%8F%90%E4%BA%A4%E8%A7%84%E8%8C%83-commit-convention)
+### 贡献指南
+[贡献指南](https://github.com/Tencent/cherry-markdown/wiki/%E8%B4%A1%E7%8C%AE%E6%8C%87%E5%8D%97%20Contribution%20Guidelines)
 
 ### 特性展示
 [特性展示 features](https://github.com/Tencent/cherry-markdown/wiki/%E7%89%B9%E6%80%A7%E5%B1%95%E7%A4%BA-features)
