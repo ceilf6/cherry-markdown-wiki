@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown编辑器真实性能测试</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-area {
+            margin: 20px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 400px;
+        }
+        .results {
+            background: #f8f9fa;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+        .editor-test {
+            margin: 30px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 15px;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .metric {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        .metric-label {
+            font-size: 12px;
+            color: #666;
+        }
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #1565c0;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.running {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        .status.success {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+        .status.error {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+        .final-results {
+            background: #f0f8ff;
+            border: 2px solid #1976d2;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #f5f5f5;
+            font-weight: bold;
+        }
+        .winner {
+            background: #e8f5e8;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Markdown编辑器真实性能测试</h1>
+        <p>这是一个在真实浏览器环境中直接测量编辑器性能的测试页面</p>
+        
+        <div>
+            <button onclick="startAllTests()">🚀 开始完整测试</button>
+            <button onclick="clearResults()">🧹 清空结果</button>
+            <button onclick="exportResults()">📄 导出结果</button>
+        </div>
+        
+        <div id="status" class="status"></div>
+        <div id="overall-results" class="final-results" style="display:none;"></div>
+        <div id="test-results"></div>
+        <div id="test-area" class="test-area" style="display:none;"></div>
+    </div>
+
+    <script>
+        // 全局localStorage修复 - 在任何编辑器加载前就设置好
+        (function() {
+            // 创建一个完整的localStorage模拟
+            const mockStorage = {
+                _data: {},
+                getItem: function(key) {
+                    return this._data[key] || null;
+                },
+                setItem: function(key, value) {
+                    this._data[key] = String(value);
+                },
+                removeItem: function(key) {
+                    delete this._data[key];
+                },
+                clear: function() {
+                    this._data = {};
+                },
+                get length() {
+                    return Object.keys(this._data).length;
+                },
+                key: function(index) {
+                    const keys = Object.keys(this._data);
+                    return keys[index] || null;
+                }
+            };
+            
+            // 如果localStorage不存在或无法访问，使用模拟版本
+            try {
+                if (!window.localStorage) {
+                    Object.defineProperty(window, 'localStorage', {
+                        value: mockStorage,
+                        writable: false,
+                        enumerable: true,
+                        configurable: false
+                    });
+                } else {
+                    // 测试是否可以访问
+                    window.localStorage.getItem('test');
+                }
+            } catch (e) {
+                // localStorage访问被拒绝，使用模拟版本
+                Object.defineProperty(window, 'localStorage', {
+                    value: mockStorage,
+                    writable: false,
+                    enumerable: true,
+                    configurable: false
+                });
+            }
+            
+            // 同样处理sessionStorage
+            try {
+                if (!window.sessionStorage) {
+                    Object.defineProperty(window, 'sessionStorage', {
+                        value: mockStorage,
+                        writable: false,
+                        enumerable: true,
+                        configurable: false
+                    });
+                } else {
+                    window.sessionStorage.getItem('test');
+                }
+            } catch (e) {
+                Object.defineProperty(window, 'sessionStorage', {
+                    value: mockStorage,
+                    writable: false,
+                    enumerable: true,
+                    configurable: false
+                });
+            }
+            
+            console.log('✅ localStorage/sessionStorage 已修复');
+        })();
+
+        // === 通用工具：等待DOM稳定、加载资源（支持多JS/CSS，JS顺序加载） ===
+        function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+        async function waitForStableDOM(el, timeout=8000, stableFrames=6){
+            if(!el) throw new Error('waitForStableDOM: invalid element');
+            return new Promise((resolve, reject) => {
+                const start = performance.now();
+                let last = el.innerHTML.length;
+                let stable = 0;
+                let rafId;
+                const check = () => {
+                    const len = el.innerHTML.length;
+                    if(len === last) stable++; else { stable = 0; last = len; }
+                    if(stable >= stableFrames) done();
+                    else if(performance.now() - start > timeout) done('timeout');
+                    else rafId = requestAnimationFrame(check);
+                };
+                const done = (err) => {
+                    if(rafId) cancelAnimationFrame(rafId);
+                    err ? reject(new Error(err)) : resolve();
+                };
+                rafId = requestAnimationFrame(check);
+            });
+        }
+
+        function loadScript(src){
+            return new Promise((resolve, reject)=>{
+                const s = document.createElement('script');
+                s.src = src;
+                s.async = false;
+                s.setAttribute('data-perf-injected','1');
+                s.onload = () => resolve(s);
+                s.onerror = () => reject(new Error('script load error: '+src));
+                document.head.appendChild(s);
+            });
+        }
+        function loadStyle(href){
+            return new Promise((resolve)=>{
+                const l = document.createElement('link');
+                l.rel='stylesheet';
+                l.href=href;
+                l.setAttribute('data-perf-injected','1');
+                l.onload = () => resolve(l);
+                l.onerror = () => resolve(l); // CSS失败不阻塞
+                document.head.appendChild(l);
+            });
+        }
+        async function loadScriptsSequentially(urls=[]){
+            const nodes=[];
+            for(const u of (urls||[])){
+                const n = await loadScript(u);
+                nodes.push(n);
+            }
+            return nodes;
+        }
+        async function loadResources(cssUrls=[], jsUrls=[]){
+            const cssNodes = await Promise.all((cssUrls||[]).map(loadStyle));
+            const jsNodes = await loadScriptsSequentially(jsUrls||[]);
+            return [...cssNodes, ...jsNodes];
+        }
+        function cleanupInjectedResources(){
+            document.querySelectorAll('[data-perf-injected="1"]').forEach(n=>n.remove());
+        }
+
+        // 测试内容
+        const testContent = {
+            small: `# 小文档测试
+这是一个小型测试文档。
+
+## 基础功能
+- 列表项 1
+- 列表项 2
+- 列表项 3
+
+**粗体** 和 *斜体* 文本。
+
+\`\`\`javascript
+console.log('Hello World');
+\`\`\`
+
+> 引用块测试
+
+| 表格 | 测试 |
+|------|------|
+| 数据1 | 数据2 |`,
+
+            medium: `# 中型文档性能测试
+
+## 简介
+这是一个中等大小的Markdown文档，用于测试编辑器的实际渲染性能。
+
+## 多级标题测试
+### 三级标题
+#### 四级标题
+##### 五级标题
+###### 六级标题
+
+## 文本格式化
+**粗体文本**、*斜体文本*、~~删除线~~、\`行内代码\`、**_粗斜体_**
+
+## 列表测试
+### 无序列表
+- 主要功能点1
+- 主要功能点2
+  - 子功能点2.1
+  - 子功能点2.2
+    - 深层嵌套2.2.1
+- 主要功能点3
+
+### 有序列表
+1. 第一步操作
+2. 第二步操作
+3. 第三步操作
+   1. 子步骤3.1
+   2. 子步骤3.2
+
+## 代码块测试
+\`\`\`javascript
+// JavaScript 代码示例
+function fibonacci(n) {
+  if (n <= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+for (let i = 0; i < 10; i++) {
+  console.log(\`fibonacci(\${i}) = \${fibonacci(i)}\`);
+}
+\`\`\`
+
+\`\`\`python
+# Python 代码示例
+def quicksort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quicksort(left) + middle + quicksort(right)
+\`\`\`
+
+## 表格测试
+| 编辑器 | 启动速度 | 渲染性能 | 内存占用 |
+|--------|----------|----------|----------|
+| Editor A | 快 | 优秀 | 中等 |
+| Editor B | 中等 | 良好 | 较高 |
+| Editor C | 慢 | 优秀 | 较低 |
+
+## 引用和链接
+> 这是一个多行引用块。
+> 
+> 包含多个段落的引用内容。
+> > 嵌套引用也需要测试。
+
+[GitHub链接](https://github.com) 和 [文档链接](https://example.com)
+
+---
+
+## 图片测试
+![测试图片](https://via.placeholder.com/300x200.png)`,
+
+            large: `# 大型文档性能压力测试
+
+## 测试概述
+这是一个大型Markdown文档，包含大量内容以测试编辑器在处理复杂文档时的真实性能表现。
+
+${Array.from({length: 15}, (_, i) => `
+## 第${i + 1}部分：重复内容测试
+
+### ${i + 1}.1 标题测试
+这是第${i + 1}部分的内容，用于测试编辑器处理大量重复结构的能力。
+
+### ${i + 1}.2 列表测试
+${Array.from({length: 8}, (_, j) => `- 列表项 ${i + 1}.${j + 1}: 这是一个测试列表项，包含一些描述文本`).join('\n')}
+
+### ${i + 1}.3 代码块测试
+\`\`\`javascript
+// 代码块 ${i + 1}
+function test${i + 1}() {
+  const data = Array.from({length: 50}, (_, k) => ({
+    id: k,
+    value: k * ${i + 1},
+    description: 'Test item ' + k
+  }));
+  return data.filter(item => item.value > ${i * 5});
+}
+\`\`\`
+
+### ${i + 1}.4 表格测试
+| ID | 名称 | 数值 | 状态 |
+|----|------|------|------|
+${Array.from({length: 4}, (_, k) => `| ${k + 1} | 项目${i + 1}-${k + 1} | ${(i + 1) * (k + 1) * 100} | 活跃 |`).join('\n')}
+
+### ${i + 1}.5 引用块测试
+> 引用块 ${i + 1}: 这是第${i + 1}个引用块，用于测试大量引用内容的渲染性能。
+> 
+> 多行引用内容，包含更多的文本信息。
+
+---
+`).join('')}
+
+## 性能测试总结
+这个大型文档包含了：
+- 15个主要部分
+- 75个子标题
+- 120个列表项
+- 15个代码块
+- 15个表格
+- 大量的文本内容
+
+用于全面测试Markdown编辑器的真实性能极限。`
+        };
+
+        // 编辑器配置（统一最小配置 + UMD 依赖）
+        const editors = [
+            {
+                name: 'Cherry Markdown',
+                version: '0.9.4',
+                cssUrls: ['https://unpkg.com/cherry-markdown@0.9.4/dist/cherry-markdown.css'],
+                jsUrls: ['https://unpkg.com/cherry-markdown@0.9.4/dist/cherry-markdown.min.js'],
+                init: function(content) {
+                    console.log('🍒 初始化 Cherry Markdown...');
+                    const container = document.getElementById('test-area');
+                    const cherry = new Cherry({
+                        id: 'test-area',
+                        value: content,
+                        model: 'previewOnly',
+                        toolbars: { showToolbar: false },
+                        engine: {
+                            global: { urlProcessor: () => false },
+                            syntax: { codeBlock: { theme: 'default' } }
+                        },
+                        editor: { theme: 'default' }
+                    });
+                    console.log('✅ Cherry Markdown 初始化成功');
+                    const ready = waitForStableDOM(container);
+                    return { instance: cherry, container, ready };
+                },
+                cleanup: function() {
+                    const testArea = document.getElementById('test-area');
+                    testArea.innerHTML = '';
+                }
+            },
+            {
+                name: 'Vditor',
+                version: '3.11.1',
+                cssUrls: ['https://unpkg.com/vditor@3.11.1/dist/index.css'],
+                jsUrls: ['https://unpkg.com/vditor@3.11.1/dist/index.min.js'],
+                init: function(content) {
+                    console.log('📝 初始化 Vditor...');
+                    const container = document.getElementById('test-area');
+                    let resolveReady;
+                    const ready = new Promise(r=>resolveReady=r);
+                    const v = new Vditor('test-area', {
+                        value: content,
+                        mode: 'wysiwyg',
+                        width: '100%',
+                        height: 400,
+                        cache: { enable: false },
+                        toolbar: [],
+                        after: () => resolveReady()
+                    });
+                    console.log('✅ Vditor 初始化成功');
+                    return { instance: v, container, ready: ready.then(()=>waitForStableDOM(container)) };
+                },
+                cleanup: function() {
+                    const testArea = document.getElementById('test-area');
+                    testArea.innerHTML = '';
+                }
+            },
+            {
+                name: 'EasyMDE',
+                version: '2.20.0',
+                cssUrls: ['https://unpkg.com/easymde@2.20.0/dist/easymde.min.css'],
+                jsUrls: ['https://unpkg.com/easymde@2.20.0/dist/easymde.min.js'],
+                init: function(content) {
+                    console.log('✏️ 初始化 EasyMDE...');
+                    const container = document.getElementById('test-area');
+                    const textarea = document.createElement('textarea');
+                    textarea.id = 'easymde-textarea';
+                    container.appendChild(textarea);
+                    const easyMDE = new EasyMDE({
+                        element: textarea,
+                        initialValue: content,
+                        spellChecker: false,
+                        autofocus: false,
+                        status: false,
+                        toolbar: false
+                    });
+                    console.log('✅ EasyMDE 初始化成功');
+                    const target = () => container.querySelector('.CodeMirror') || container;
+                    const ready = (async()=>{ await waitForStableDOM(target()); })();
+                    return { instance: easyMDE, container, ready };
+                },
+                cleanup: function() {
+                    const testArea = document.getElementById('test-area');
+                    testArea.innerHTML = '';
+                }
+            },
+            {
+                name: 'ByteMD',
+                version: '1.22.0',
+                cssUrls: ['https://unpkg.com/@bytemd/core@1.22.0/dist/index.min.css'],
+                jsUrls: [
+                    'https://unpkg.com/@bytemd/core@1.22.0/dist/index.min.js',
+                    'https://unpkg.com/@bytemd/plugin-gfm@1.22.0/dist/index.min.js'
+                ],
+                init: function(content) {
+                    console.log('📖 初始化 ByteMD...');
+                    const container = document.getElementById('test-area');
+                    if (typeof bytemd === 'undefined' || !bytemd.Editor) throw new Error('ByteMD not loaded');
+                    const plugins = (typeof bytemdPluginGfm === 'function') ? [bytemdPluginGfm()] : [];
+                    const editor = new bytemd.Editor({
+                        target: container,
+                        props: { value: content, plugins }
+                    });
+                    console.log('✅ ByteMD 初始化成功');
+                    const ready = waitForStableDOM(container);
+                    return { instance: editor, container, ready };
+                },
+                cleanup: function() {
+                    const testArea = document.getElementById('test-area');
+                    testArea.innerHTML = '';
+                }
+            },
+            {
+                name: 'TOAST UI Editor',
+                version: '3.2.2',
+                cssUrls: ['https://uicdn.toast.com/editor/latest/toastui-editor.min.css'],
+                jsUrls: ['https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js'],
+                init: function(content) {
+                    console.log('🍞 初始化 TOAST UI Editor...');
+                    const container = document.getElementById('test-area');
+                    let resolveReady;
+                    const ready = new Promise(r=>resolveReady=r);
+                    if (typeof toastui === 'undefined' || !toastui.Editor) throw new Error('TOAST UI Editor not loaded');
+                    const editor = new toastui.Editor({
+                        el: container,
+                        initialValue: content,
+                        previewStyle: 'vertical',
+                        height: '400px',
+                        events: { load: () => resolveReady() }
+                    });
+                    console.log('✅ TOAST UI Editor 初始化成功');
+                    return { instance: editor, container, ready: ready.then(()=>waitForStableDOM(container)) };
+                },
+                cleanup: function() {
+                    const testArea = document.getElementById('test-area');
+                    testArea.innerHTML = '';
+                }
+            },
+            {
+                name: 'Milkdown',
+                version: '7.15.2',
+                cssUrls: [
+                    'https://unpkg.com/@milkdown/theme-nord@7.15.2/style.css'
+                ],
+                jsUrls: [
+                    'https://unpkg.com/@milkdown/core@7.15.2/dist/index.umd.js',
+                    'https://unpkg.com/@milkdown/preset-commonmark@7.15.2/dist/index.umd.js',
+                    'https://unpkg.com/@milkdown/theme-nord@7.15.2/dist/index.umd.js'
+                ],
+                init: function(content) {
+                    console.log('🥛 初始化 Milkdown...');
+                    const container = document.getElementById('test-area');
+                    const root = document.createElement('div');
+                    container.appendChild(root);
+                    if (typeof Milkdown === 'undefined' || !Milkdown.Editor) throw new Error('Milkdown not loaded');
+
+                    const ready = (async()=>{
+                        await Milkdown.Editor
+                            .make()
+                            .config((ctx)=>{
+                                ctx.set(Milkdown.rootCtx, root);
+                            })
+                            .use(MilkdownPresetCommonmark.commonmark)
+                            .use(MilkdownThemeNord.nord)
+                            .create();
+                        await waitForStableDOM(root);
+                    })();
+
+                    console.log('✅ Milkdown 初始化成功');
+                    return { instance: null, container: root, ready };
+                },
+                cleanup: function() {
+                    const testArea = document.getElementById('test-area');
+                    testArea.innerHTML = '';
+                }
+            }
+        ];
+
+        let allResults = {};
+        let currentTestIndex = 0;
+
+        // 测试单个编辑器
+        async function testEditor(editor, contentSize, content) {
+            const testArea = document.getElementById('test-area');
+            testArea.style.display = 'block';
+            
+            updateStatus(`正在测试 ${editor.name} - ${contentSize} 文档 (${content.length} 字符)...`, 'running');
+            
+            try {
+                // 清理测试区域与历史资源
+                testArea.innerHTML = '';
+                cleanupInjectedResources();
+
+                const startTime = performance.now();
+
+                // 加载资源（支持多JS/CSS；JS顺序加载）
+                const loadStartTime = performance.now();
+                await loadResources(editor.cssUrls, editor.jsUrls);
+                const loadEndTime = performance.now();
+                const loadTime = loadEndTime - loadStartTime;
+
+                // 初始化（ready -> DOM 稳定）
+                const initStartTime = performance.now();
+                const { instance, container, ready } = editor.init(content);
+                if (ready && typeof ready.then === 'function') {
+                    await ready;
+                } else {
+                    await waitForStableDOM(container || testArea);
+                }
+                const readyEndTime = performance.now();
+
+                const startupTime = readyEndTime - initStartTime;
+                const totalTime = readyEndTime - startTime;
+
+                // 获取内存使用情况
+                let memoryUsed = 0;
+                if (performance.memory) {
+                    memoryUsed = performance.memory.usedJSHeapSize / 1024 / 1024;
+                }
+
+                // 清理实例与资源
+                if (editor.cleanup) {
+                    editor.cleanup();
+                }
+                cleanupInjectedResources();
+
+                const result = {
+                    loadTime: Math.round(loadTime * 100) / 100,
+                    startupTime: Math.round(startupTime * 100) / 100,
+                    totalTime: Math.round(totalTime * 100) / 100,
+                    memoryUsed: Math.round(memoryUsed * 100) / 100,
+                    contentLength: content.length,
+                    success: true
+                };
+                
+                updateStatus(`✅ ${editor.name} - ${contentSize} 测试成功`, 'success');
+                console.log(`${editor.name} ${contentSize} 结果:`, result);
+                return result;
+                
+            } catch (error) {
+                updateStatus(`❌ ${editor.name} - ${contentSize} 测试失败: ${error.message}`, 'error');
+                console.error(`${editor.name} ${contentSize} 错误:`, error);
+                return {
+                    error: error.message,
+                    contentLength: content.length,
+                    success: false
+                };
+            } finally {
+                testArea.style.display = 'none';
+            }
+        }
+
+        // 更新状态
+        function updateStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+        }
+
+        // 显示单个编辑器结果
+        function displayEditorResult(editorName, results) {
+            const resultsDiv = document.getElementById('test-results');
+            
+            const editorDiv = document.createElement('div');
+            editorDiv.className = 'editor-test';
+            editorDiv.innerHTML = `
+                <h3>📦 ${editorName}</h3>
+                <div class="metrics">
+                    ${Object.entries(results).map(([size, result]) => {
+                        if (result.success) {
+                            return `
+                                <div class="metric">
+                                    <div class="metric-value">${result.loadTime}ms</div>
+                                    <div class="metric-label">${size} 资源加载</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">${result.startupTime}ms</div>
+                                    <div class="metric-label">${size} 启动(至可见)</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">${result.totalTime}ms</div>
+                                    <div class="metric-label">${size} 总时间</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">${result.memoryUsed}MB</div>
+                                    <div class="metric-label">${size} 内存</div>
+                                </div>
+                            `;
+                        } else {
+                            return `
+                                <div class="metric">
+                                    <div class="metric-value">ERROR</div>
+                                    <div class="metric-label">${size} - ${result.error}</div>
+                                </div>
+                            `;
+                        }
+                    }).join('')}
+                </div>
+                <div class="results">详细数据: ${JSON.stringify(results, null, 2)}</div>
+            `;
+            
+            resultsDiv.appendChild(editorDiv);
+        }
+
+        // 显示最终对比结果
+        function displayFinalResults() {
+            const finalDiv = document.getElementById('overall-results');
+            finalDiv.style.display = 'block';
+            
+            // 生成对比表格
+            const successfulEditors = Object.entries(allResults).filter(([name, data]) => 
+                Object.values(data).some(test => test.success)
+            );
+            
+            if (successfulEditors.length === 0) {
+                finalDiv.innerHTML = '<h2>❌ 所有测试都失败了</h2>';
+                return;
+            }
+            
+            let tableHTML = `
+                <h2>🏆 最终性能对比结果</h2>
+                <table>
+                    <tr>
+                        <th>编辑器</th>
+                        <th>小文档总时间(ms)</th>
+                        <th>中文档总时间(ms)</th>
+                        <th>大文档总时间(ms)</th>
+                        <th>大文档内存(MB)</th>
+                        <th>综合评分</th>
+                    </tr>
+            `;
+            
+            // 计算综合评分并排序
+            const rankings = successfulEditors.map(([name, data]) => {
+                const small = data.small?.totalTime || 999999;
+                const medium = data.medium?.totalTime || 999999;
+                const large = data.large?.totalTime || 999999;
+                const memory = data.large?.memoryUsed || 999;
+                
+                // 综合评分：时间越短越好，内存越少越好
+                const score = (small * 0.2 + medium * 0.3 + large * 0.5) + memory * 10;
+                
+                return {
+                    name,
+                    small: data.small?.success ? small : 'ERROR',
+                    medium: data.medium?.success ? medium : 'ERROR', 
+                    large: data.large?.success ? large : 'ERROR',
+                    memory: data.large?.success ? memory : 'ERROR',
+                    score
+                };
+            }).sort((a, b) => a.score - b.score);
+            
+            rankings.forEach((item, index) => {
+                const isWinner = index === 0;
+                tableHTML += `
+                    <tr class="${isWinner ? 'winner' : ''}">
+                        <td>${isWinner ? '🥇 ' : ''}${item.name}</td>
+                        <td>${item.small}</td>
+                        <td>${item.medium}</td>
+                        <td>${item.large}</td>
+                        <td>${item.memory}</td>
+                        <td>${Math.round(item.score)}</td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += '</table>';
+            
+            // 添加详细分析
+            tableHTML += `
+                <h3>📊 性能分析</h3>
+                <div class="results">
+测试时间: ${new Date().toLocaleString()}
+测试环境: ${navigator.userAgent}
+
+性能排名 (基于综合评分):
+${rankings.map((item, index) => 
+    `${index + 1}. ${item.name} - 评分: ${Math.round(item.score)}`
+).join('\n')}
+
+测试说明:
+• 加载时间: JS/CSS资源下载和解析时间
+• 初始化时间: 编辑器实例创建时间  
+• 渲染时间: Markdown内容解析和DOM渲染时间
+• 总时间: 从开始到编辑器完全可用的时间
+• 内存占用: JavaScript堆内存使用量
+• 综合评分: 基于时间和内存的加权评分，越低越好
+
+原始数据:
+${JSON.stringify(allResults, null, 2)}
+                </div>
+            `;
+            
+            finalDiv.innerHTML = tableHTML;
+        }
+
+        // 开始所有测试
+        async function startAllTests() {
+            allResults = {};
+            document.getElementById('test-results').innerHTML = '';
+            document.getElementById('overall-results').style.display = 'none';
+            
+            updateStatus('开始性能测试...', 'running');
+            
+            for (const editor of editors) {
+                const editorResults = {};
+                
+                for (const [size, content] of Object.entries(testContent)) {
+                    const result = await testEditor(editor, size, content);
+                    editorResults[size] = result;
+                    
+                    // 每次测试后等待一下，避免资源冲突
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+                
+                allResults[editor.name] = editorResults;
+                displayEditorResult(editor.name, editorResults);
+            }
+            
+            displayFinalResults();
+            updateStatus('🎉 所有测试完成！', 'success');
+        }
+
+        // 清空结果
+        function clearResults() {
+            allResults = {};
+            document.getElementById('test-results').innerHTML = '';
+            document.getElementById('overall-results').style.display = 'none';
+            updateStatus('结果已清空', 'success');
+        }
+
+        // 导出结果
+        function exportResults() {
+            if (Object.keys(allResults).length === 0) {
+                alert('没有测试结果可导出');
+                return;
+            }
+            
+            const report = {
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                methodology: "HTML页面直接测试真实浏览器性能",
+                testContent: {
+                    small: testContent.small.length + " 字符",
+                    medium: testContent.medium.length + " 字符",
+                    large: testContent.large.length + " 字符"
+                },
+                results: allResults
+            };
+            
+            const blob = new Blob([JSON.stringify(report, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `markdown-editor-performance-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // 页面加载完成后显示准备状态
+        window.addEventListener('load', function() {
+            updateStatus('准备就绪，点击"开始完整测试"按钮开始测试', 'success');
+        });
+    </script>
+</body>
+</html> 
